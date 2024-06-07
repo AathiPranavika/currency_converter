@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+       body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+*{
+    margin: 10px;
+}
+.container {
+  max-width: 400px;
+  width: 100%;
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center the content horizontally */
+}
+button{
+    background-color:#11b8e6;
+    border:none;
+    padding: 10px;
+    color:#fff;
+    font-size: 20px;
+    border-radius: 10px;
+
+}
+h1 {
+  color: #333;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.box select,
+.box input[type="number"] {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 150px;
+}
+
+.box select {
+  margin-bottom: 10px;
+}
+
+.box button {
+  padding: 8px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.box button:hover {
+  background-color: #0056b3;
+}
+
+.res {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.err {
+  color: red;
+  margin-top: 10px;
+}
+.rightbox,.leftbox{
+    display: flex;
+    flex-direction: row;
+    gap:90px;
+}
+
+    </style>
+</head>
+<body>
+<h1>CURRENCY CONVERTER</h1>
+<div class="box">
+    <div class="leftbox">
+        <select name="currency"id="an" class="currency">
+
+        </select>
+        <input type="number" id="num" placeholder="enter value">
+    </div>
+    <div class="rightbox">
+        <select name="currency" id="d" class="currency">
+        </select>
+        <input type="number" id="res" placeholder="result">   
+
+    </div>
+</div>
+<div>
+    <button type="submit">CONVERT</button>
+</div>
+    <script>
+     let cur=fetch('https://api.frankfurter.app/currencies')
+     .then((res)=>res.json())
+     .then(msg=>disp(msg))
+
+    let a=document.getElementById("d")
+    let b=document.getElementById("an")
+     function disp(res)
+     {
+        let z=Object.entries(res)
+        for(i=0;i<z.length;i++)
+        {
+            let p=document.createElement("option")
+            let p1=document.createElement("option")
+            p1.innerHTML=z[i][0]
+            p.innerHTML=z[i][0]
+            a.appendChild(p)
+            b.appendChild(p1)
+        }
+     }
+     let but=document.querySelector("button")
+     but.addEventListener('click',con)
+     function con()
+     {
+        let ans=Number(document.getElementById("num").value)
+        //selected option in drop down can be done as
+        let cur1=a.options[a.selectedIndex].value
+        let cur2=b.value
+        console.log(cur2)
+        console.log(cur1)
+        if(cur1===cur2)
+        {
+            alert("choose different currency")
+        }
+        else
+        {
+            const host = 'api.frankfurter.app';
+            fetch(`https://${host}/latest?amount=${ans}&from=${cur1}&to=${cur2}`)
+            .then(resp => resp.json())
+            .then((data) => {
+             let r=document.getElementById("res")
+             r.value=(Object.values(data.rates)[0])
+         });
+        }
+     }
+    
+ </script>
+</body>
+</html>
